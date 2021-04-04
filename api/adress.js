@@ -47,3 +47,21 @@ export const deleteAddressApi = async (idAddress, logout) => {
     return false;
   }
 };
+
+export const updateAddressApi = async (idAddress, address, logout) => {
+  try {
+    const url = `${BASE_URL}/adresses/${idAddress}`;
+    const params = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(address),
+    };
+    const result = await authFetch(url, params, logout);
+    return result;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};

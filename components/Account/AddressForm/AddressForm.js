@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { Button, Form } from "semantic-ui-react";
 import * as Yup from "yup";
-import { createAdressApi } from "../../../api/adress";
+import { createAdressApi, updateAddressApi } from "../../../api/adress";
 import useAuth from "../../../hooks/useAuth";
 
 const AddressForm = ({ setShowModal, setReloadAddresses, address }) => {
@@ -14,7 +14,7 @@ const AddressForm = ({ setShowModal, setReloadAddresses, address }) => {
     initialValues: address ?? initialValues(),
     validationSchema: Yup.object(validationSchema()),
     onSubmit: (formData) => {
-      address ? console.log("actualizo") : createAdress(formData);
+      address ? updateAddress(formData) : createAdress(formData);
     },
   });
 
@@ -27,6 +27,26 @@ const AddressForm = ({ setShowModal, setReloadAddresses, address }) => {
       setLoading(false);
     } else {
       formik.resetForm();
+      setReloadAddresses(true);
+      setLoading(false);
+      setShowModal(false);
+    }
+  };
+
+  const updateAddress = async (formData) => {
+    setLoading(true);
+    const formDataTemp = {
+      ...formData,
+      user: auth.idUser,
+    };
+    console.log(formDataTemp);
+    const resp = await updateAddressApi(address._id, formDataTemp, logout);
+    console.log(resp);
+    if (!resp) {
+      toast.warning("Error al actualizar la direccion");
+      setLoading(false);
+    } else {
+      toast.success("Se ha actualizado la dirección");
       setReloadAddresses(true);
       setLoading(false);
       setShowModal(false);
