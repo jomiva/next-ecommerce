@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { Icon } from "semantic-ui-react";
 import BasicLayout from "../layouts/BasicLayout";
 import useAuth from "../hooks/useAuth";
 import { getMeApi } from "../api/user";
 import ChangeNameForm from "../components/Account/ChangeNameForm/ChangeNameForm";
 import ChangeEmailForm from "../components/Account/ChangeEmailForm/ChangeEmailForm";
+import ChangePasswordForm from "../components/Account/ChangePasswordForm/ChangePasswordForm";
+import BasicModal from "../components/Modal/BasicModal";
+import AddressForm from "../components/Account/AddressForm/AddressForm";
+import ListAddress from "../components/Account/ListAddress/ListAddress";
 
 const Account = () => {
   const router = useRouter();
@@ -32,6 +37,7 @@ const Account = () => {
         logout={logout}
         setReloadUser={setReloadUser}
       />
+      <Adresses />
     </BasicLayout>
   );
 };
@@ -53,7 +59,46 @@ const Configuration = ({ user, logout, setReloadUser }) => {
           logout={logout}
           setReloadUser={setReloadUser}
         />
+        <ChangePasswordForm user={user} logout={logout} />
       </div>
+    </div>
+  );
+};
+
+const Adresses = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [titleModal, setTitleModal] = useState("");
+  const [formModal, setFormModal] = useState(null);
+  const [reloadAddresses, setReloadAddresses] = useState(false);
+
+  const openModal = (title, address) => {
+    setTitleModal(title);
+    setFormModal(
+      <AddressForm
+        setReloadAddresses={setReloadAddresses}
+        setShowModal={setShowModal}
+        address={address}
+      />
+    );
+    setShowModal(true);
+  };
+
+  return (
+    <div className="account__addresses">
+      <div className="title">
+        Direcciones
+        <Icon name="plus" onClick={() => openModal("Nueva direccion")} />
+      </div>
+      <div className="data">
+        <ListAddress
+          reloadAddresses={reloadAddresses}
+          setReloadAddresses={setReloadAddresses}
+          openModal={openModal}
+        />
+      </div>
+      <BasicModal show={showModal} setShow={setShowModal} title={titleModal}>
+        {formModal}
+      </BasicModal>
     </div>
   );
 };

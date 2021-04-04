@@ -14,7 +14,7 @@ const ChangeEmailForm = ({ user, logout, setReloadUser }) => {
     onSubmit: async (formData) => {
       setLoading(true);
       const resp = await updateEmailApi(user.id, formData.email, logout);
-      if (!resp) {
+      if (!resp || resp?.statusCode === 400) {
         toast.error("Error al actualizar el email");
       } else {
         setReloadUser(true);
