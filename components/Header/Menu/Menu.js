@@ -5,6 +5,8 @@ import BasicModal from "../../Modal/BasicModal/BasicModal";
 import Auth from "../../Auth";
 import useAuth from "../../../hooks/useAuth";
 import { getMeApi } from "../../../api/user";
+import { getPlatoformsApi } from "../../../api/platforms";
+import { map } from "lodash";
 
 export default function MenuWeb() {
   const [showModal, setShowModal] = useState(false);
@@ -51,17 +53,22 @@ export default function MenuWeb() {
 }
 
 function MenuPlatforms() {
+  const [platforms, setPlatforms] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getPlatoformsApi();
+      setPlatforms(response || []);
+    })();
+  }, []);
+
   return (
     <Menu>
-      <Link href="/play-station">
-        <Menu.Item as="a">Playstation</Menu.Item>
-      </Link>
-      <Link href="/xbox">
-        <Menu.Item as="a">xbox</Menu.Item>
-      </Link>
-      <Link href="/switch">
-        <Menu.Item as="a">switch</Menu.Item>
-      </Link>
+      {map(platforms, (platform) => (
+        <Link key={platform.url} href={`/games/${platform.url}`}>
+          <Menu.Item as="a">{platform.title}</Menu.Item>
+        </Link>
+      ))}
     </Menu>
   );
 }
