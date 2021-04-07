@@ -4,6 +4,8 @@ import { ToastContainer } from "react-toastify";
 import jwtDecode from "jwt-decode";
 import { useRouter } from "next/router";
 import "react-toastify/dist/ReactToastify.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import "../scss/global.scss";
 import AuthContext from "../context/AuthContext";
 import { getToken, removeToken, setToken } from "../api/token";
