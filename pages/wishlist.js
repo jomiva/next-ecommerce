@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Loader } from "semantic-ui-react";
-import { size, forEach } from "lodash";
+import { size } from "lodash";
 import BasicLayout from "../layouts/BasicLayout";
 import useAuth from "../hooks/useAuth";
 import { getFavoriteApi } from "../api/favorite";
 import ListGames from "../components/ListGames/ListGames";
+import useCart from "../hooks/useCart";
 
 const wishlist = () => {
   const [games, setGames] = useState(null);
 
   const { logout, auth } = useAuth();
+
+  useCart;
 
   useEffect(() => {
     (async () => {

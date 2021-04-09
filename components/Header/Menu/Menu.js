@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Container, Menu, Grid, Icon } from "semantic-ui-react";
+import { Container, Menu, Grid, Icon, Label } from "semantic-ui-react";
 import Link from "next/link";
 import BasicModal from "../../Modal/BasicModal/BasicModal";
 import Auth from "../../Auth";
@@ -7,6 +7,7 @@ import useAuth from "../../../hooks/useAuth";
 import { getMeApi } from "../../../api/user";
 import { getPlatoformsApi } from "../../../api/platforms";
 import { map } from "lodash";
+import useCart from "../../../hooks/useCart";
 
 export default function MenuWeb() {
   const [showModal, setShowModal] = useState(false);
@@ -74,6 +75,8 @@ function MenuPlatforms() {
 }
 
 const MenuOptions = React.memo(({ setShow, user, logout }) => {
+  const { productsCart } = useCart();
+
   return (
     <Menu>
       {user ? (
@@ -99,6 +102,9 @@ const MenuOptions = React.memo(({ setShow, user, logout }) => {
           <Link href="/cart">
             <Menu.Item as="a" className="m-0">
               <Icon name="cart" />
+              <Label color="red" floating circular>
+                {productsCart}
+              </Label>
             </Menu.Item>
           </Link>
           <Menu.Item onClick={logout} className="m-0">
