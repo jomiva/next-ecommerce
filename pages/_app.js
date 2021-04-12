@@ -14,6 +14,8 @@ import {
   addProductCart,
   countProductsCart,
   getProductsCart,
+  removeAllProductsCart,
+  removeProductCard,
 } from "../api/cart";
 
 export default function MyApp({ Component, pageProps }) {
@@ -84,11 +86,16 @@ export default function MyApp({ Component, pageProps }) {
         addProduct(product);
       },
       getProductsCart: getProductsCart,
-      removeProductCart: () => null,
-      removeAllProductsCart: () => null,
+      removeProductCart: (product) => removeProduct(product),
+      removeAllProductsCart: removeAllProductsCart,
     }),
     [totalProductsCart]
   );
+
+  const removeProduct = (product) => {
+    removeProductCard(product);
+    setReloadCart(true);
+  };
 
   if (auth === undefined) return null;
 

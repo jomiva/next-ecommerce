@@ -2,6 +2,8 @@ import { toast } from "react-toastify";
 import { size, includes, remove } from "lodash";
 import { BASE_URL, CART } from "../utils/constants";
 
+import { authFetch } from "../utils/fetch";
+
 export const getProductsCart = () => {
   const cart = localStorage.getItem(CART);
 
@@ -38,4 +40,47 @@ export const countProductsCart = () => {
   } else {
     return size(cart);
   }
+};
+
+export const removeProductCard = (product) => {
+  const cart = getProductsCart();
+  remove(cart, (item) => {
+    return item === product;
+  });
+
+  if (size(cart) > 0) {
+    localStorage.setItem(CART, cart);
+  } else {
+    localStorage.removeItem(CART);
+  }
+};
+
+export const paymentCartApi = async (
+  token,
+  products,
+  idUser,
+  address,
+  logout
+) => {
+  try {
+    const { user, createdAt, ...addressShipping } = address;
+
+    const url = `${BASE_URL}/orders`;
+    const params = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ token, products, idUser, addressShipping }),
+    };
+    const result = await authFetch(url, params, logout);
+    return result;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const removeAllProductsCart = () => {
+  localStorage.removeItem(CART);
 };
